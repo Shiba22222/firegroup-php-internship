@@ -8,7 +8,7 @@
         $authen = $_COOKIE['role'];
         if($authen == 'user'){
             echo "<center>Bạn không đủ quyền truy cập vào trang này</center><br>";
-            echo "<a href='product.php'><center> Click để về lại trang chủ</center></a>";
+            echo "<a href='../products/product.php'><center> Click để về lại trang chủ</center></a>";
             die;
         }
     }

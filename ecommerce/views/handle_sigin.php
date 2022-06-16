@@ -1,5 +1,5 @@
 <?php
-	include 'connection.php';
+	include '../connection.php';
 	if(isset($_POST['submit'])){
 		$name = $_POST['user_name'];
 		$email = $_POST['user_email'];

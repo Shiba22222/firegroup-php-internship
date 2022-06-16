@@ -46,7 +46,7 @@
                             <ul class="submenu ">
 
                                 <li>
-                                    <a href="account.php">Tất cả Tài khoản</a>
+                                    <a href="../admins/account.php">Tất cả Tài khoản</a>
                                 </li>
 
                             </ul>
@@ -60,7 +60,7 @@
                             <ul class="submenu ">
 
                                 <li>
-                                    <a href="category.php">Tất cả danh mục</a>
+                                    <a href="../categories/category.php">Tất cả danh mục</a>
                                 </li>
                             </ul>
 
@@ -74,7 +74,7 @@
                             <ul class="submenu ">
 
                                 <li>
-                                    <a href="product.php">Tất cả sản phẩm</a>
+                                    <a href="../products/product.php    ">Tất cả sản phẩm</a>
                                 </li>
 
                             </ul>

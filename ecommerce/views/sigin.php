@@ -1,5 +1,5 @@
 <?php 
-include '../handle_sigin.php';
+include 'handle_sigin.php';
  ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -57,7 +57,7 @@ body {
                 </a>
                 </br>
                 </br>
-                <a href="admins/product.php" class="Husky">
+                <a href="products/product.php" class="Husky">
                     <font color="#FF0000">Back to Home</font>
                 </a>
             </div>

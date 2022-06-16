@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include 'connection.php';
+include '../connection.php';
 
 if(isset($_POST['submit'])){
 
@@ -22,7 +22,7 @@ if(isset($_POST['submit'])){
 					setcookie("user_email", $user['user_email'], time()+9999, "/","", 0);
 					setcookie("role", $user['role'], time()+9999, "/","", 0);
 					
-					header("location: views/admins/product.php");
+					header("location: products/product.php");
 
 				}
 				else{	
