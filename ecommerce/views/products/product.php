@@ -25,6 +25,13 @@
                                 unset($_SESSION['delete_product']);
                             }
 				           ?>
+                           <?php
+                            if(isset($_SESSION['error_product']))
+                            {
+                                echo $_SESSION['error_product'];
+                                unset($_SESSION['error_product']);
+                            }
+				           ?>
                         <div class="card-body">
                             <a href="add_product.php" class="btn btn-outline-success">+ Tạo Sản phẩm Mới</a>
                         </div>
@@ -40,7 +47,7 @@
                                         <th>Giá</th>
                                         <th>Tiêu đề</th>
                                         <th>Danh mục</th>
-                                        <th>Người tạo</th>
+                                        <th>Người tạo - Quyền</th>
                                         <th>ACTION</th>
                                     </tr>
                                 </thead>
@@ -65,6 +72,8 @@
                                                                 $category_name = $rows['category_name'];
                                                                 $user_id = $rows['user_id'];
                                                                 $user_name = $rows['user_name'];
+                                                                $user_role = $rows['role'];
+                                                                
                                                                 ?>
                                     <tr>
                                         <td><?php echo $i++; ?></td>
@@ -75,7 +84,8 @@
                                         <td><?php echo $price ?></td>
                                         <td><?php echo $title ?></td>
                                         <td><?php echo $category_name ?></td>
-                                        <td><?php echo $user_name ?></td>
+                                        <td><?php echo $user_name."---".$user_role ?></td>
+                            
                                         <td>
                                             <a href="album_product.php?product_id=<?php echo $id ?>">
                                                 <button type="submit" title="update"
