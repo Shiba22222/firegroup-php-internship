@@ -6,7 +6,6 @@
         $id = $_GET['product_id'];
         
         $sqlProduct = "SELECT * FROM products 
-                        inner join categories on products.category_id = categories.category_id 
                         WHERE product_id = '$id'";
         $resProduct = mysqli_query($connect, $sqlProduct);
 
@@ -19,10 +18,7 @@
             $description = $rowProduct['product_description'];
             $image = $rowProduct['product_image'];
             $category = $rowProduct['category_id'];
-            $category_name = $rowProduct['category_name'];
-            
-            
-            
+
         }
     }
     
@@ -57,33 +53,6 @@
                         <label for="first-name-column">Tiêu đề:</label>
                         <input type="text" id="first-name-column" class="form-control" value="<?php echo $title ?>"
                             name="product_title">
-                    </div>
-                </div>
-                <option value="" value=""></option>
-                <div class="col-md-6 col-12">
-                    <div class="form-group">
-                        <label for="first-name-column">Danh Mục:</label>
-                        <select name="category_id" id="">
-                            <?php
-                                $sqlCategoey = "SELECT * FROM categories
-                                                WHERE ";
-                                $res = mysqli_query($connect, $sqlCategoey);
-                                
-                                if($res == true){
-                                    $categories = mysqli_fetch_all($res);
-
-                                    foreach($categories as $category){
-                                        $name = $category[1];
-                                        $id = $category[0];
-                                        echo '<option value='."$id".'">'.$name.'</option>';
-                                        
-                                    }
-                            
-                                }
-                                
-                               
-                            ?>
-                        </select>
                     </div>
                 </div>
                 <div class="col-md-12 col-12">
@@ -135,7 +104,6 @@
         $title = $_POST['product_title'];
         $description = $_POST['product_description'];
         $image = $_FILES['image']['name'];
-        $category = $_POST['category_id'];
         
         if(isset($image)){
             $cate_image = $_FILES['image']['name'];
@@ -161,8 +129,7 @@
                                 product_price = '$price',
                                 product_title = '$title',
                                 product_description = '$description',
-                                product_image = '$cate_image',
-                                category_id = '$category'
+                                product_image = '$cate_image'
                                 WHERE product_id = '$id'";
             $resUpdate = mysqli_query($connect, $updateProduct);
             // echo '<pre>' . var_export($updateProduct, true) . '</pre>';die;

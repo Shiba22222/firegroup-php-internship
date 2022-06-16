@@ -63,6 +63,7 @@
                                                                 $description = $rows['product_description'];
                                                                 $image = $rows['product_image'];
                                                                 $category_name = $rows['category_name'];
+                                                                $user_id = $rows['user_id'];
                                                                 $user_name = $rows['user_name'];
                                                                 ?>
                                     <tr>
