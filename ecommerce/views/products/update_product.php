@@ -3,10 +3,11 @@
 ?>
 <?php
     if(isset($_GET['product_id'])){
-        $id = $_GET['product_id'];
+        $productId = $_GET['product_id'];
         
-        $sqlProduct = "SELECT * FROM products 
-                        WHERE product_id = '$id'";
+        $sqlProduct = "SELECT * FROM products
+                        inner join users on users.user_id = products.user_id
+                        WHERE product_id = '$productId'";
         $resProduct = mysqli_query($connect, $sqlProduct);
 
         if($resProduct == true){
@@ -17,11 +18,22 @@
             $title = $rowProduct['product_title'];
             $description = $rowProduct['product_description'];
             $image = $rowProduct['product_image'];
-            $category = $rowProduct['category_id'];
+            $product_category_id = $rowProduct['category_id'];
+            $productUserRole = $rowProduct['role'];
+            $productUserId = $rowProduct ['user_id'];
+            
 
         }
     }
     
+?>
+
+<?php
+    if(isset($_SESSION['update']))
+    {
+        echo $_SESSION['update'];
+        unset($_SESSION['update']);
+    }
 ?>
 <div class="card-content">
     <div class="card-body">
@@ -55,6 +67,35 @@
                             name="product_title">
                     </div>
                 </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="first-name-column">Danh Mục:</label>
+                        </select>
+                        <select name="category_id" id="">
+                            <?php
+                                $sqlCategoey = "SELECT * FROM categories";
+                                $res = mysqli_query($connect, $sqlCategoey);
+                                
+                                if($res == true){
+                                    $categories = mysqli_fetch_all($res);
+
+                                    foreach($categories as $category){
+                                        $name = $category[1];
+                                        $category_id = $category[0]; 
+                                        $isSelected =  $product_category_id == $category_id ? true : false;
+                                        if($isSelected) {
+                                            echo '<option selected value='."$category_id".'>'.$name.'</option>';
+                                        }else{
+                                            echo '<option value='."$category_id".'>'.$name.'</option>';
+                                        }
+                                    }
+                                    
+                                }
+                               
+                            ?>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-12 col-12">
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1" class="form-label">Mô Tả :</label>
@@ -85,7 +126,7 @@
                 </div>
                 
                 <div class="col-12 d-flex justify-content-end">
-                    <input type="hidden" name="product_id" value="<?php echo $id ?>">
+                    <input type="hidden" name="product_id" value="<?php echo $productId ?>">
                     <input type="hidden" name="image" value="<?php echo $image ?>">
                     <input type="submit" name="update" class="btn btn-primary mr-1 mb-1" value="Lưu">
                 </div>
@@ -97,14 +138,19 @@
 <?php 
     
     if(isset($_POST['update'])){
+        // echo '<pre>' . var_export($rowProduct, true) . '</pre>';die;
         $id = $_POST['product_id'];
         $name = $_POST['product_name'];
         $quantity = $_POST['product_quantity'];
         $price = $_POST['product_price'];
         $title = $_POST['product_title'];
         $description = $_POST['product_description'];
-        $image = $_FILES['image']['name'];
-        
+        $adminRole = $_COOKIE['role'];
+        $adminID = $_COOKIE['user_id'];
+        $productUserRole = $rowProduct['role'];
+        $productUserId = $rowProduct ['user_id'];
+
+        $image = $_FILES['image']['name']; 
         if(isset($image)){
             $cate_image = $_FILES['image']['name'];
             if($cate_image !="")
@@ -122,28 +168,45 @@
         }else{
             $cate_image = "";
         }
-        if(!empty($name) && !empty($quantity) && !empty($price) && !empty($title)){
-            $updateProduct = "UPDATE products SET
-                                product_name = '$name',
-                                product_quantity = '$quantity',
-                                product_price = '$price',
-                                product_title = '$title',
-                                product_description = '$description',
-                                product_image = '$cate_image'
-                                WHERE product_id = '$id'";
-            $resUpdate = mysqli_query($connect, $updateProduct);
-            // echo '<pre>' . var_export($updateProduct, true) . '</pre>';die;
-            if(!empty($resUpdate)){
-                header("location: product.php");
-                exit();
-            }else {
-                echo ( mysqli_error($connect));
-                die;
-            }
-            
+        
+        $isUpdate = false;
+        
+        if($productUserRole == 'admin' && $productUserId == $adminID){  
+            $isUpdate = true;
+        }
+        if($productUserRole == 'user' && $productUserId == $adminID){ 
+            $isUpdate = true;
+        }
+        if($productUserRole == 'user' && $adminRole == 'admin'){ 
+            $isUpdate = true;
         }
 
-        
+        if($isUpdate){
+            if(!empty($name) && !empty($quantity) && !empty($price) && !empty($title)){
+                $updateProduct = "UPDATE products SET
+                                    product_name = '$name',
+                                    product_quantity = '$quantity',
+                                    product_price = '$price',
+                                    product_title = '$title',
+                                    product_description = '$description',
+                                    product_image = '$cate_image'
+                                    WHERE product_id = '$id'";
+                $resUpdate = mysqli_query($connect, $updateProduct);
+                // echo '<pre>' . var_export($updateProduct, true) . '</pre>';die;
+                if(!empty($resUpdate)){
+                    header("location: product.php");
+                    exit();
+                }else {
+                    echo ( mysqli_error($connect));
+                    die;
+                }
+                
+            }
+        }else {
+             $_SESSION['update'] = '<div><font color="blue">Bạn không có quyền chỉnh sửa sản phẩm!</font></div>';
+            }
+
+    
     }
 ?>
 <?php include '../layouts/footer.php' ?>
